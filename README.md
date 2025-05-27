@@ -20,3 +20,15 @@
 
 ## 📁 Project Structure
 
+Realtime Tracker/
+├── public/ # Static files (CSS, JS, Images)
+├── views/ # EJS templates (if using EJS)
+├── routes/ # Route definitions
+├── controllers/ # Business logic
+├── models/ # Mongoose models (if using MongoDB)
+├── app.js / server.js # Main server file
+└── package.json # Project config and dependencies
+
+▶️ Run the App
+
+npx nodemon app.js
