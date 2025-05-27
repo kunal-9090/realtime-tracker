@@ -4,12 +4,10 @@ const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 
-const server = http.createServer(app);
-const io = socketio(server);
+const server = http.createServer(app);      // ✅ Correct: wrap express in HTTP server
+const io = socketio(server);                // ✅ Attach socket.io to that server
 
 app.set("view engine", "ejs");
-
-// ✅ Corrected from app.set(...) to app.use(...)
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on("connection", (socket) => {
@@ -17,7 +15,7 @@ io.on("connection", (socket) => {
 
     socket.on("send-location", (data) => {
         io.emit("receive-location", {
-            id: socket.id, // ✅ Fixed typo from `is` to `id`
+            id: socket.id,
             ...data,
         });
     });
@@ -31,6 +29,7 @@ app.get('/', (req, res) => {
     res.render("index");
 });
 
-server.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
