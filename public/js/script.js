@@ -27,16 +27,19 @@ if (navigator.geolocation) {
 }
 
 socket.on("receive-location", ({ id, latitude, longitude }) => {
-    if (markers[id]) {
-        markers[id].setLatLng([latitude, longitude]);
+    if (!markers[id]) {
+        const marker = L.marker([latitude, longitude]).addTo(map);
+        marker.bindPopup(id === socket.id ? "You" : `User: ${id}`).openPopup();
+        markers[id] = marker;
     } else {
-        markers[id] = L.marker([latitude, longitude]).addTo(map);
+        markers[id].setLatLng([latitude, longitude]);
     }
-    // Optional: center the view on your own marker
+
     if (id === socket.id) {
         map.setView([latitude, longitude], 16);
     }
 });
+
 
 socket.on("user-disconnected", (id) => {
     if (markers[id]) {

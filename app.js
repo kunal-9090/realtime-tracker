@@ -14,11 +14,16 @@ io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
     socket.on("send-location", (data) => {
-        io.emit("receive-location", {
-            id: socket.id,
-            ...data,
-        });
+    socket.broadcast.emit("receive-location", {
+        id: socket.id,
+        ...data,
     });
+    // Optionally emit back to the sender to update their own marker
+    socket.emit("receive-location", {
+        id: socket.id,
+        ...data,
+    });
+});
 
     socket.on("disconnect", () => {
         io.emit("user-disconnected", socket.id);
